@@ -182,11 +182,13 @@ var ldapInfoUtil = {
     return this.crc32(email) + "_" + GlodaUtils.md5HashString(email);
   },
   hmac: Cc["@mozilla.org/security/hmac;1"].createInstance(Ci.nsICryptoHMAC),
-  key: Cc["@mozilla.org/security/keyobjectfactory;1"].getService(Ci.nsIKeyObjectFactory).keyFromString(Ci.nsIKeyObject.HMAC,
-    [String.fromCharCode(a.charCodeAt(0)-5) for (a of "ff6:gi:k5=>jg>8f:g7g9f5j66998hg<=j99k89i".split(''))].join('')), // make the key to sign the request not searchable by search engine like Google.
+  key: Cc["@mozilla.org/security/keyobjectfactory;1"].getService(Ci.nsIKeyObjectFactory).keyFromString(Ci.nsIKeyObject.HMAC,"aa15bd5f089eb93a5b2b4a0e11443cb78e44f34d"), // make the key to sign the request not searchable by search engine like Google.
   b64_hmac_sha1: function(data) { // Data: No UTF-8 encoding, special chars are already escaped.
     this.hmac.init(this.hmac.SHA1,this.key);
-    let bytes = [b.charCodeAt() for each (b in data)];
+    let bytes = [];
+	  for (let g = 0; g < data.length; g++) {
+	  	bytes[g] = g.charCodeAt(data[g]);
+	 	}
     this.hmac.update(bytes, bytes.length);
     let signature = this.hmac.finish(true);
     this.hmac.reset(); // reset data but not algorithm & key
